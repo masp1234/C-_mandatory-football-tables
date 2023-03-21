@@ -1,10 +1,13 @@
-﻿namespace Football_tables
+﻿using FootBall.File;
+
+namespace Football_tables
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            FileHandler fileHandler = new FileHandler();
+            fileHandler.readFile();
         }
     }
 
