@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Football_tables;
+using Football_tables.Models;
 
 namespace FootBall.File
 {
@@ -35,51 +37,54 @@ namespace FootBall.File
             return teams;
         }
 
-        public List<Round> ReadRounds(int roundNumber)
+        public List<Round> ReadRounds()
         {
+            string[] files = Directory.GetFiles($"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
             List<Round> rounds = new();
-            // hent alle filer i en mappe
-            // for hver fil i mappe, læs runde
 
-            string filePath = $"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\round-{roundNumber}.csv";
-            StreamReader reader = null;
-
-            if (System.IO.File.Exists(filePath))
+            foreach(string file in files)
             {
-                reader = new StreamReader(System.IO.File.OpenRead(filePath));
+                Regex regex = new Regex(@"\\round-(\d+)");
+                MatchCollection matches = regex.Matches(file);
+                // TODO split matches[0] og tag sidste del - sæt resultat til round.Number
+                Console.WriteLine(string.Join(' ', matches));
+                Round round = new Round(1);
+                // hent alle filer i en mappe
+                // for hver fil i mappe, læs runde
+                StreamReader reader = new StreamReader(System.IO.File.OpenRead(file));
                 string headerLine = reader.ReadLine();
-            }
-            int lineNumber = 2;
+                
+                int lineNumber = 2;
 
-            while (!reader.EndOfStream)
-            {
                 
-                var line = reader.ReadLine();
-                var values = line.Split(';');
-                int homeGoals;
-                int awayGoals;
-                bool homeGoalsIsValid = int.TryParse(values[2], out homeGoals);
-                bool awayGoalsIsValid = int.TryParse(values[3], out awayGoals);
-                if (homeGoalsIsValid && awayGoalsIsValid )
+                while (!reader.EndOfStream)
                 {
-                    Round round = new Round(values[0], values[1], homeGoals, awayGoals);
-                    Console.WriteLine(string.Join(' ', values));
-                    rounds.Add(round);
+
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+                    int homeGoals;
+                    int awayGoals;
+                    bool homeGoalsIsValid = int.TryParse(values[2], out homeGoals);
+                    bool awayGoalsIsValid = int.TryParse(values[3], out awayGoals);
+                    if (homeGoalsIsValid && awayGoalsIsValid )
+                    {
+                        var match = new Football_tables.Models.Match(values[0], values[1], homeGoals, awayGoals);
+                        Console.WriteLine(string.Join(' ', values));
+                        round.AddMatch(match);
+                    }
+                    else
+                    {
+                        throw new InvalidDataException($"An invalid input was found in <filename> on {lineNumber}");
+                    }
+                    lineNumber += 1;
                 }
-                else
-                {
-                    throw new InvalidDataException($"An invalid input was found in <filename> on {lineNumber}");
-                }
-                lineNumber += 1;
-                
+                rounds.Add(round);
             }
+            Console.WriteLine(string.Join(' ', files));
+            
             return rounds;
+           
 
         }
-
-       
-        
-        
-        //string text = System.IO.File.ReadAllText(@"C:\Users\Public\TestFolder\WriteText.txt");
     }
 }

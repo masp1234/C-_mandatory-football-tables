@@ -1,25 +1,26 @@
-﻿using System;
+﻿using Football_tables.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Football_tables
+namespace Football_tables.Models
 {
     internal class Round
     {
-        public String Home { get; set; }
-        public String Away { get; set; }
-        public int HomeGoals { get; set; }
-        public int AwayGoals { get; set; }
+        public int Number { get; set; }
+        public List<Match> Matches { get; set; }
 
-        public Round(string home, string away, int homeGoals, int awayGoals)
+        public Round(int number)
         {
-            this.Home = home;
-            this.Away = away;
-            this.HomeGoals = homeGoals;
-            this.AwayGoals = awayGoals;
+            Number = number;
+            Matches = new List<Match>();
+        }
+
+        public void AddMatch(Match match)
+        {
+            Matches.Add(match);
+        }
     }
-    }
-    
 }

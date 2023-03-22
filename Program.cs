@@ -7,8 +7,8 @@ namespace Football_tables
         static void Main(string[] args)
         {
             FileHandler fileHandler = new FileHandler();
-            fileHandler.ReadTeams();
-            fileHandler.ReadRounds(1);
+            //fileHandler.ReadTeams();
+            fileHandler.ReadRounds();
         }
     }
 
