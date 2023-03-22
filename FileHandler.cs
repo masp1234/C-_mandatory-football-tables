@@ -45,21 +45,20 @@ namespace FootBall.File
             foreach(string file in files)
             {
                 Regex regex = new Regex(@"\\round-(\d+)");
-                MatchCollection matches = regex.Matches(file);
+                var regexMatch = regex.Match(file);
+                string fileName = regexMatch.Value[1..];
                 // TODO split matches[0] og tag sidste del - sæt resultat til round.Number
-                Console.WriteLine(string.Join(' ', matches));
                 Round round = new Round(1);
                 // hent alle filer i en mappe
                 // for hver fil i mappe, læs runde
                 StreamReader reader = new StreamReader(System.IO.File.OpenRead(file));
-                string headerLine = reader.ReadLine();
+                // for at skippe første linje med headers
+                reader.ReadLine();
                 
                 int lineNumber = 2;
 
-                
                 while (!reader.EndOfStream)
                 {
-
                     var line = reader.ReadLine();
                     var values = line.Split(';');
                     int homeGoals;
@@ -74,7 +73,7 @@ namespace FootBall.File
                     }
                     else
                     {
-                        throw new InvalidDataException($"An invalid input was found in <filename> on {lineNumber}");
+                        throw new InvalidDataException($"Invalid input was found in file: {fileName} on line: {lineNumber}");
                     }
                     lineNumber += 1;
                 }
