@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Football-tables", "Football-tables.csproj", "{E888F745-5CBB-4877-85D7-2478CC40AC5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Football-tables", "Football-tables.csproj", "{E888F745-5CBB-4877-85D7-2478CC40AC5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5EEB4E96-5055-43AB-AB7A-43DD4AF898B0}"
+	ProjectSection(SolutionItems) = preProject
+		round-1.csv = round-1.csv
+		Round.cs = Round.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
