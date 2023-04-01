@@ -39,11 +39,25 @@ namespace FootBall.File
 
             return teams;
         }
+        /*
+        public List<League> ReadLeagues()
+        {   
+            // Lav lige League-klasse først
+            // List<League> leagues = new();
+            // 
+            // læs setup fil
+            // create league-objekter ud fra leagues i setup-fil
+
+            // return leagues listen
+            // smid leagues listen videre til readrounds, så der kun læses matches, som indgår i listen.
+        }
+        */
 
         public List<Round> ReadRounds()
         {
-            string[] files = Directory.GetFiles("/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/rounds");
-            //$"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
+            string[] files = Directory.GetFiles($"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
+            //
+            // "/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/rounds"
             List<Round> rounds = new();
 
             
@@ -70,8 +84,8 @@ namespace FootBall.File
                     var values = line.Split(';');
                     int homeGoals;
                     int awayGoals;
-                    bool homeGoalsIsValid = int.TryParse(values[2], out homeGoals);
-                    bool awayGoalsIsValid = int.TryParse(values[3], out awayGoals);
+                    bool homeGoalsIsValid = int.TryParse(values[3], out homeGoals);
+                    bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
                     if (homeGoalsIsValid && awayGoalsIsValid )
                     {
                         var match = new Football_tables.Models.Match(values[0], values[1], values[3], homeGoals, awayGoals);
