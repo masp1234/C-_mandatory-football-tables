@@ -9,6 +9,8 @@ using Football_tables.Models;
 
 namespace FootBall.File
 {
+
+
     internal class FileHandler
     {
 
@@ -16,7 +18,8 @@ namespace FootBall.File
         {
             List<Team> teams = new();
 
-            string filePath = "C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\teams.csv";
+            string filePath = "/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/teams.csv";
+                //"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\teams.csv";
             StreamReader reader = null;
 
             if (System.IO.File.Exists(filePath))
@@ -39,13 +42,17 @@ namespace FootBall.File
 
         public List<Round> ReadRounds()
         {
-            string[] files = Directory.GetFiles($"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
+            string[] files = Directory.GetFiles("/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/rounds");
+            //$"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
             List<Round> rounds = new();
 
+            
+           
             foreach(string file in files)
             {
                 Regex regex = new Regex(@"\\round-(\d+)");
                 var regexMatch = regex.Match(file);
+
                 string fileName = regexMatch.Value[1..];
                 // TODO split matches[0] og tag sidste del - sæt resultat til round.Number
                 Round round = new Round(1);
@@ -67,7 +74,7 @@ namespace FootBall.File
                     bool awayGoalsIsValid = int.TryParse(values[3], out awayGoals);
                     if (homeGoalsIsValid && awayGoalsIsValid )
                     {
-                        var match = new Football_tables.Models.Match(values[0], values[1], homeGoals, awayGoals);
+                        var match = new Football_tables.Models.Match(values[0], values[1], values[3], homeGoals, awayGoals);
                         Console.WriteLine(string.Join(' ', values));
                         round.AddMatch(match);
                     }
