@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Football_tables;
-using Football_tables.Models;
+using Football_tables.models;
 
 namespace FootBall.File
 {
@@ -39,19 +39,21 @@ namespace FootBall.File
 
             return teams;
         }
-        /*
+        
         public List<League> ReadLeagues()
-        {   
+        {
+            List<League> leagues = new();
             // Lav lige League-klasse først
-            // List<League> leagues = new();
+            // 
             // 
             // læs setup fil
             // create league-objekter ud fra leagues i setup-fil
 
             // return leagues listen
             // smid leagues listen videre til readrounds, så der kun læses matches, som indgår i listen.
+            return leagues;
         }
-        */
+        
 
         public List<Round> ReadRounds()
         {
@@ -88,7 +90,7 @@ namespace FootBall.File
                     bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
                     if (homeGoalsIsValid && awayGoalsIsValid )
                     {
-                        var match = new Football_tables.Models.Match(values[0], values[1], values[3], homeGoals, awayGoals);
+                        var match = new Football_tables.models.Match(values[0], values[1], values[3], homeGoals, awayGoals);
                         Console.WriteLine(string.Join(' ', values));
                         round.AddMatch(match);
                     }

@@ -1,11 +1,11 @@
-﻿using Football_tables.Models;
+﻿using Football_tables.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Football_tables.Models
+namespace Football_tables.models
 {
     internal class Round
     {

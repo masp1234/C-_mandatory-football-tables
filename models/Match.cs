@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Football_tables.Models
+namespace Football_tables.models
 {
     internal class Match
     {
