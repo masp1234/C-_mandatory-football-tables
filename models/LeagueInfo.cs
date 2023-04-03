@@ -31,5 +31,12 @@ namespace Football_tables.models
             this.PositionsPromotedToUpperLeague = positionsPromotedToUpperLeague;
             this.PositionsRelegatedToLowerLeague = positionsRelegatedToLowerLeague;
         }
+
+        public override string ToString()
+        {
+            return $"Name: {this.Name} promotions: {this.PositionsPromotedToChampionsLeague}, {this.PositionsPromotedToEuropaLeague}, " +
+                $"{this.PositionsPromotedToConferenceLeague}, {this.PositionsPromotedToUpperLeague}, {this.PositionsRelegatedToLowerLeague}";
+
+        }
     }
 }

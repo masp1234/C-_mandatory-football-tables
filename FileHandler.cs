@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,10 +17,12 @@ namespace FootBall.File
 
         public List<Team> ReadTeams()
         {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        
             List<Team> teams = new();
 
-            string filePath = "/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/teams.csv";
-                //"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\teams.csv";
+            string filePath = basePath[..^17] + "files/teams/teams.csv";
+                //"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\files\\teams\\teams.csv";
             StreamReader reader = null;
 
             if (System.IO.File.Exists(filePath))
@@ -43,23 +46,65 @@ namespace FootBall.File
         public List<League> ReadLeagues()
         {
             List<League> leagues = new();
-            // Lav lige League-klasse først
-            // 
-            // 
-            // læs setup fil
-            // create league-objekter ud fra leagues i setup-fil
 
-            // return leagues listen
-            // smid leagues listen videre til readrounds, så der kun læses matches, som indgår i listen.
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string filePath = basePath[..^17] + "files/setup/setup.csv";
+            StreamReader reader = null;
+
+            if (System.IO.File.Exists(filePath))
+            {
+                reader = new StreamReader(System.IO.File.OpenRead(filePath));
+            }
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+                string leagueName = values[0];
+                int positionsPromotedToChampionsLeague;
+                int positionsPromotedToEuropaLeague;
+                int positionsPromotedToConferenceLeague;
+                int positionsPromotedToUpperLeague;
+                int positionsRelegatedToLowerLeague;
+              
+                bool positionsPromotedToChampionsLeagueIsValid = int.TryParse(values[1], out positionsPromotedToChampionsLeague);
+                bool positionsPromotedToEuropaLeagueIsValid = int.TryParse(values[2], out positionsPromotedToEuropaLeague);
+                bool positionsPromotedToConferenceLeagueIsValid = int.TryParse(values[3], out positionsPromotedToConferenceLeague);
+                bool positionsPromotedToUpperLeagueIsValid = int.TryParse(values[4], out positionsPromotedToUpperLeague);
+                bool positionsRelegatedToLowerLeagueIsValid = int.TryParse(values[5], out positionsRelegatedToLowerLeague);
+
+                if (positionsPromotedToChampionsLeagueIsValid &&
+                    positionsPromotedToEuropaLeagueIsValid &&
+                    positionsPromotedToConferenceLeagueIsValid &&
+                    positionsPromotedToUpperLeagueIsValid &&
+                    positionsRelegatedToLowerLeagueIsValid) 
+                {
+                    League league = new()
+                    {
+                        LeagueInfo = new LeagueInfo(
+                        leagueName,
+                        positionsPromotedToChampionsLeague,
+                        positionsPromotedToEuropaLeague,
+                        positionsPromotedToConferenceLeague,
+                        positionsPromotedToUpperLeague,
+                        positionsRelegatedToLowerLeague
+                        )
+                    };
+                    leagues.Add(league);
+                    
+                }
+                
+                
+                // smid leagues listen videre til readrounds, så der kun læses matches, som indgår i listen.
+            }
+            Console.WriteLine(string.Join(' ', leagues));
             return leagues;
         }
         
 
         public List<Round> ReadRounds()
         {
-            string[] files = Directory.GetFiles($"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\rounds");
-            //
-            // "/Users/danieljorgensen/Desktop/Skole/4 semester/c#/mandatory_1/C-_mandatory-football-tables/rounds"
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string[] files = Directory.GetFiles(basePath[..^17] + "files/rounds");
             List<Round> rounds = new();
 
             
@@ -88,7 +133,7 @@ namespace FootBall.File
                     int awayGoals;
                     bool homeGoalsIsValid = int.TryParse(values[3], out homeGoals);
                     bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
-                    if (homeGoalsIsValid && awayGoalsIsValid )
+                    if (homeGoalsIsValid && awayGoalsIsValid)
                     {
                         var match = new Football_tables.models.Match(values[0], values[1], values[3], homeGoals, awayGoals);
                         Console.WriteLine(string.Join(' ', values));

@@ -11,5 +11,9 @@ namespace Football_tables.models
         public LeagueInfo LeagueInfo { get; set; }
         public List<Team> Teams { get; set; }
 
+        public override string ToString()
+        {
+            return $"League info: {this.LeagueInfo}";
+        }
     }
 }
