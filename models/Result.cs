@@ -6,6 +6,9 @@ namespace Football_tables.models
 		public int Postion { get; set; }
         public string SpecialMarking { get; set; }
         public string FullClubName { get; set; }
+        // TODO fjern de 4 nedenstående Properties og lav istedet en liste med Enums: WIN, LOSS, DRAW
+        // gamesplayed er jo bare listens længde
+        
         public int GamesPlayed { get; set; }
         public int GamesWon { get; set; }
         public int GamesDrawn { get; set; }

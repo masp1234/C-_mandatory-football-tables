@@ -22,7 +22,6 @@ namespace FootBall.File
             List<Team> teams = new();
 
             string filePath = basePath[..^17] + "files/teams/teams.csv";
-                //"C:\\Users\\Martin\\4. Semester\\C# - Unity\\mandatories\\Football-tables\\files\\teams\\teams.csv";
             StreamReader reader = null;
 
             if (System.IO.File.Exists(filePath))
@@ -42,7 +41,6 @@ namespace FootBall.File
 
             return teams;
         }
-        
         public List<League> ReadLeagues()
         {
             List<League> leagues = new();
@@ -92,8 +90,6 @@ namespace FootBall.File
                     leagues.Add(league);
                     
                 }
-                
-                
                 // smid leagues listen videre til readrounds, så der kun læses matches, som indgår i listen.
             }
             Console.WriteLine(string.Join(' ', leagues));
