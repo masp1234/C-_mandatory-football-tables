@@ -14,6 +14,7 @@ namespace Football_tables.models
             FullName = fullName;
             SpecialRanking = specialRanking;
             LeagueName = leagueName;
+            Result = new();
         }
 
         public string Abbreviation { get; set; }
@@ -21,5 +22,7 @@ namespace Football_tables.models
         
         public string SpecialRanking { get; set; }
         public string LeagueName { get; set; }
+
+        public Result Result { get; }
     }
 }

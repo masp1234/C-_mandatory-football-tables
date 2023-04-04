@@ -4,14 +4,8 @@ namespace Football_tables
 {
 	internal class View
 	{
-        public static void PrintCurrentStanding(List<Result> results)
+        public static void PrintCurrentStanding(List<League> leagues)
         {
-            results.Sort();
-            foreach(Result result in results)
-            {
-                //resten af attributes og colors
-                Console.WriteLine($"{result.Postion}. {result.SpecialMarking} {result.FullClubName} ");
-            }
         }
     }
 }
