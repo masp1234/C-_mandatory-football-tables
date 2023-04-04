@@ -15,6 +15,25 @@ namespace Football_tables
 		public void Run()
 		{
 			List<League> leagues = fileHandler.ReadLeagues();
+			List<Team> teams = fileHandler.ReadTeams();
+
+			foreach (League league in leagues)
+			{
+				for (int i = 0;  i < teams.Count; i++)
+				{
+					
+                    if (league.LeagueInfo.Name == teams[i].LeagueName)
+                    {
+                        Console.WriteLine(teams[i].FullName);
+                        league.Add(teams[i]);
+						teams.RemoveAt(i);
+						i--;
+                    }
+                    
+                }
+                Console.WriteLine(league.Teams.Count);
+            }
+
 
         }
 	}

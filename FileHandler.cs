@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Football_tables;
 using Football_tables.models;
 
 namespace FootBall.File
@@ -32,7 +26,7 @@ namespace FootBall.File
             {
                 var line = reader.ReadLine();
                 var values = line.Split(';');
-                Team team = new Team(values[0], values[1], values[2]);
+                Team team = new Team(values[0], values[1], values[2], values[3]);
                 Console.WriteLine(string.Join(' ', values));
                 teams.Add(team);
             }
@@ -105,7 +99,7 @@ namespace FootBall.File
 
             
            
-            foreach(string file in files)
+            foreach(string file in files)  
             {
                 Regex regex = new Regex(@"\\round-(\d+)");
                 var regexMatch = regex.Match(file);
