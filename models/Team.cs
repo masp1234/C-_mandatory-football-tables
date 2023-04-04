@@ -15,6 +15,7 @@ namespace Football_tables.models
             SpecialRanking = specialRanking;
             LeagueName = leagueName;
             Result = new();
+            HomeMatchesAgainst = new();
         }
 
         public string Abbreviation { get; set; }
@@ -24,5 +25,17 @@ namespace Football_tables.models
         public string LeagueName { get; set; }
 
         public Result Result { get; }
+
+        public List<string> HomeMatchesAgainst { get; }
+
+        public void ClearHomeMatchesAgainst ()
+        {
+            HomeMatchesAgainst.Clear();
+        }
+
+        public void AddHomeMatchesAgainst(string homeMatch)
+        {
+            HomeMatchesAgainst.Add(homeMatch);
+        }
     }
 }

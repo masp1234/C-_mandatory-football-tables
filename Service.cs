@@ -14,27 +14,62 @@ namespace Football_tables
 
 		public void Run()
 		{
-			List<League> leagues = fileHandler.ReadLeagues();
-			List<Team> teams = fileHandler.ReadTeams();
+            var leagues = GetLeagues();
+            var rounds = fileHandler.ReadRounds();
+            foreach (var round in rounds)
+            {
+                foreach (var match in round.Matches)
+                {
+                    if (IsRelevantMatch(leagues, match)) {
+                        var homeTeam = 
+                        if(!HasAlreadyPlayed(match))
+                        {
 
-			foreach (League league in leagues)
-			{
-				for (int i = 0;  i < teams.Count; i++)
-				{
-					
+                        }
+
+                    }
+                    
+
+                }
+                
+
+            }
+        }
+
+       
+        private bool IsRelevantMatch(List<League> leagues, Match match)
+        {
+            foreach (var league in leagues)
+            {
+                if (league.LeagueInfo.Name == match.League)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+		public Dictionary<string, League> GetLeagues() {
+            Dictionary<string, League> leagueDictionary = new();
+
+            List<League> leagues = fileHandler.ReadLeagues();
+            List<Team> teams = fileHandler.ReadTeams();
+
+            foreach (League league in leagues)
+            {
+                for (int i = 0; i < teams.Count; i++)
+                {
                     if (league.LeagueInfo.Name == teams[i].LeagueName)
                     {
                         Console.WriteLine(teams[i].FullName);
                         league.Add(teams[i]);
-						teams.RemoveAt(i);
-						i--;
+                        teams.RemoveAt(i);
+                        i--;
                     }
-                    
                 }
+                leagueDictionary.Add(league.LeagueInfo.Name, league);
                 Console.WriteLine(league.Teams.Count);
             }
-
-
+            return leagueDictionary;
         }
 	}
 }

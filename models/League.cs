@@ -11,6 +11,10 @@ namespace Football_tables.models
         public LeagueInfo LeagueInfo { get; set; }
         public List<Team> Teams { get; }
 
+        public List<Team>? UpperFraction { get; set; }
+
+        public List<Team>? LowerFraction { get; set; }
+
         public League() {
             Teams = new List<Team>();
         }
