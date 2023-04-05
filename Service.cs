@@ -16,32 +16,46 @@ namespace Football_tables
 		{
             var leagues = GetLeagues();
             var rounds = fileHandler.ReadRounds();
+            
             foreach (var round in rounds)
             {
                 foreach (var match in round.Matches)
-                {
-                    if (IsRelevantMatch(leagues, match)) {
-                        var homeTeam = 
-                        if(!HasAlreadyPlayed(match))
+                    
+                {                   
+                    if (IsRelevantMatch(leagues, match) && !HasAlreadyPlayed(match, leagues, round)) {
+                       if (round.Number < 23)
                         {
 
-                        }
-
+                        } 
                     }
-                    
-
-                }
-                
-
-            }
+                }       
+        }           
         }
-
-       
-        private bool IsRelevantMatch(List<League> leagues, Match match)
+        private bool HasAlreadyPlayed(Match match, Dictionary<string, League> leagues, Round round)
         {
-            foreach (var league in leagues)
+            League league = leagues[match.League];
+            foreach(Team team in league.Teams)
             {
-                if (league.LeagueInfo.Name == match.League)
+                if (team.Abbreviation == match.Home)
+                {
+                    foreach(string homeMatchAgainst in team.HomeMatchesAgainst)
+                    {
+                        if (homeMatchAgainst == match.Away)
+                        {
+                            throw new InvalidDataException($"{match.Home} has already played against {match.Away}. " +
+                                                            $"The error is in round: {round.Number}");
+                        }
+                    }
+                    team.AddHomeMatchesAgainst(match.Away);
+                }
+            }
+            return false;       
+        }
+        private bool IsRelevantMatch(Dictionary<string, League> leagues, Match match)
+        {
+            foreach (var leagueName in leagues.Keys)
+            {
+                if (leagueName == match.League)
                 {
                     return true;
                 }
