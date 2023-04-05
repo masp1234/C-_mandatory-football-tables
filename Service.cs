@@ -1,6 +1,8 @@
 ﻿using FootBall.File;
 using Football_tables.models;
 using System;
+using System.Text;
+using Football_tables.enums;
 
 namespace Football_tables
 {
@@ -14,6 +16,7 @@ namespace Football_tables
 
 		public void Run()
 		{
+            
             var leagues = GetLeagues();
             var rounds = fileHandler.ReadRounds();
             
@@ -21,44 +24,103 @@ namespace Football_tables
             {
                 foreach (var match in round.Matches)
                     
-                {                   
-                    if (IsRelevantMatch(leagues, match) && !HasAlreadyPlayed(match, leagues, round)) {
+                {
+                    League league = leagues[match.League];
+                    (Team? homeTeam, Team? awayTeam) = findTeams(match, league);
+                    if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round)) {
                        if (round.Number < 23)
                         {
+                            processMatch(match, homeTeam.Result, awayTeam.Result);
 
-                        } 
+                        }
+                        else
+                        {
+                           
+                        }
                     }
                 }       
         }           
         }
-        private bool HasAlreadyPlayed(Match match, Dictionary<string, League> leagues, Round round)
+
+        private void processMatch(Match match, Result homeTeamResult, Result awayTeamResult)
         {
-            League league = leagues[match.League];
-            foreach(Team team in league.Teams)
+            
+
+            homeTeamResult.GoalsAgainst += match.AwayGoals;
+            awayTeamResult.GoalsAgainst += match.HomeGoals;
+
+            homeTeamResult.GoalsFor += match.HomeGoals;
+            awayTeamResult.GoalsFor += match.AwayGoals;
+
+
+            if (match.AwayGoals == match.HomeGoals)
             {
-                if (team.Abbreviation == match.Home)
+                homeTeamResult.GamesDrawn += 1;
+                awayTeamResult.GamesDrawn += 1;
+
+                homeTeamResult.addMatchResult(MatchResult.D);
+                awayTeamResult.addMatchResult(MatchResult.D);
+            }
+            else if (match.HomeGoals > match.AwayGoals)
+            {
+                homeTeamResult.GamesWon += 1;
+                awayTeamResult.GamesLost += 1;
+
+                homeTeamResult.addMatchResult(MatchResult.W);
+                awayTeamResult.addMatchResult(MatchResult.L);
+            }
+            else
+            {
+                awayTeamResult.GamesWon += 1;
+                homeTeamResult.GamesLost += 1;
+
+                homeTeamResult.addMatchResult(MatchResult.L);
+                awayTeamResult.addMatchResult(MatchResult.W);
+            }
+
+        }
+
+        private bool HasAlreadyPlayed(Match match, Team? homeTeam, Team? awayTeam, Round round)
+        {
+
+            foreach (string homeMatchAgainst in homeTeam.HomeMatchesAgainst)
+            {
+                if (homeMatchAgainst == awayTeam.Abbreviation)
                 {
-                    foreach(string homeMatchAgainst in team.HomeMatchesAgainst)
-                    {
-                        if (homeMatchAgainst == match.Away)
-                        {
-                            throw new InvalidDataException($"{match.Home} has already played against {match.Away}. " +
-                                                            $"The error is in round: {round.Number}");
-                        }
-                    }
-                    team.AddHomeMatchesAgainst(match.Away);
+                    throw new InvalidDataException($"{match.Home} has already played against {match.Away}. " +
+                                                    $"The error is in round: {round.Number}");
                 }
             }
-            return false;       
+            homeTeam.AddHomeMatchesAgainst(match.Away);
+            return false;
         }
-        private bool IsRelevantMatch(Dictionary<string, League> leagues, Match match)
+
+        private (Team?,Team?) findTeams(Match match, League league)
         {
-            foreach (var leagueName in leagues.Keys)
+            Team? homeTeam = null;
+            Team? awayTeam = null;
+
+            foreach(Team team in league.Teams)
             {
-                if (leagueName == match.League)
+                if(homeTeam != null && awayTeam != null)
                 {
-                    return true;
+                    break;
+                }else if(match.Home == team.Abbreviation)
+                {
+                    homeTeam = team;
+                }else if(match.Away == team.Abbreviation)
+                {
+                    awayTeam = team;
                 }
+            }
+            return (homeTeam, awayTeam);
+        }
+
+        private bool IsRelevantMatch(League league, Match match)
+        {
+                if (league.LeagueInfo.Name == match.League)
+                {
+                    return true;       
             }
             return false;
         }

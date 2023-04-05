@@ -27,5 +27,14 @@ namespace Football_tables.models
         {
             return $"League info: {this.LeagueInfo}";
         }
+        public static List<Team> sortList(List<Team> teams)
+        {
+            return teams.OrderByDescending(team => team.Result.Points)
+                .ThenByDescending(team => team.Result.GoalDifference)
+                .ThenByDescending(team => team.Result.GoalsFor)
+                .ThenByDescending(team => team.Result.GoalsAgainst)
+                .ThenBy(team => team.FullName)
+                .ToList();
+        }
     }
 }
