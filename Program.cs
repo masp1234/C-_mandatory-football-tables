@@ -1,6 +1,4 @@
-﻿using FootBall.File;
-
-namespace Football_tables
+﻿namespace Football_tables
 {
     internal class Program
     {

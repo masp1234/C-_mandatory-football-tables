@@ -1,5 +1,4 @@
-﻿
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Football_tables.models;
 
 namespace FootBall.File
@@ -22,7 +21,7 @@ namespace FootBall.File
                 Console.WriteLine(string.Join(' ', values));
                 teams.Add(team);
             }
-            Console.WriteLine(teams.Count());
+            Console.WriteLine(teams.Count);
 
             return teams;
         }
@@ -32,7 +31,7 @@ namespace FootBall.File
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string filePath = basePath[..^17] + path;
 
-            StreamReader? reader = null;
+            StreamReader? reader;
 
             if (System.IO.File.Exists(filePath))
             {
@@ -55,18 +54,13 @@ namespace FootBall.File
             {
                 var line = reader.ReadLine();
                 var values = line.Split(';');
-                string leagueName = values[0];
-                int positionsPromotedToChampionsLeague;
-                int positionsPromotedToEuropaLeague;
-                int positionsPromotedToConferenceLeague;
-                int positionsPromotedToUpperLeague;
-                int positionsRelegatedToLowerLeague;
 
-                bool positionsPromotedToChampionsLeagueIsValid = int.TryParse(values[1], out positionsPromotedToChampionsLeague);
-                bool positionsPromotedToEuropaLeagueIsValid = int.TryParse(values[2], out positionsPromotedToEuropaLeague);
-                bool positionsPromotedToConferenceLeagueIsValid = int.TryParse(values[3], out positionsPromotedToConferenceLeague);
-                bool positionsPromotedToUpperLeagueIsValid = int.TryParse(values[4], out positionsPromotedToUpperLeague);
-                bool positionsRelegatedToLowerLeagueIsValid = int.TryParse(values[5], out positionsRelegatedToLowerLeague);
+                string leagueName = values[0].ToLower();
+                bool positionsPromotedToChampionsLeagueIsValid = int.TryParse(values[1], out int positionsPromotedToChampionsLeague);
+                bool positionsPromotedToEuropaLeagueIsValid = int.TryParse(values[2], out int positionsPromotedToEuropaLeague);
+                bool positionsPromotedToConferenceLeagueIsValid = int.TryParse(values[3], out int positionsPromotedToConferenceLeague);
+                bool positionsPromotedToUpperLeagueIsValid = int.TryParse(values[4], out int positionsPromotedToUpperLeague);
+                bool positionsRelegatedToLowerLeagueIsValid = int.TryParse(values[5], out int positionsRelegatedToLowerLeague);
 
                 if (positionsPromotedToChampionsLeagueIsValid &&
                     positionsPromotedToEuropaLeagueIsValid &&
@@ -106,17 +100,11 @@ namespace FootBall.File
 
                 string fileName = regexMatch.Value[1..];
                 string[] strings = fileName.Split("-");
-                
                 int roundNumber = int.Parse(strings[1]);
                 
-
-
-                // TODO split matches[0] og tag sidste del - sæt resultat til round.Number
                 Round round = new Round(roundNumber);
-                // hent alle filer i en mappe
-                // for hver fil i mappe, læs runde
                 StreamReader reader = new StreamReader(System.IO.File.OpenRead(file));
-                // for at skippe første linje med headers
+                
                 reader.ReadLine();
 
                 int lineNumber = 2;
@@ -126,22 +114,12 @@ namespace FootBall.File
                     var line = reader.ReadLine();
                     var values = line.Split(';');
 
-                    string homeTeam = values[1];
-                    string awayTeam = values[2];
-                    int homeGoals;
-                    int awayGoals;
-                    bool homeGoalsIsValid = int.TryParse(values[3], out homeGoals);
-                    bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
-                    if (homeGoalsIsValid && awayGoalsIsValid && homeTeam != awayTeam)
+                    GameMatch? match = CreateGameMatch(values);
+                    if (match == null)
                     {
-                        var match = new Football_tables.models.Match(values[0], homeTeam, awayTeam, homeGoals, awayGoals);
-                        Console.WriteLine(string.Join(' ', values));
-                        round.AddMatch(match);
+                        throw new InvalidDataException($"The match in file: {fileName} has invalid data on line: {lineNumber}");
                     }
-                    else
-                    {
-                        throw new InvalidDataException($"Invalid input was found in file: {fileName} on line: {lineNumber}");
-                    }
+                    round.AddMatch(match);
                     lineNumber += 1;
                 }
                 rounds.Add(round);
@@ -151,6 +129,26 @@ namespace FootBall.File
             return rounds;
 
 
+        }
+        private GameMatch? CreateGameMatch(string[] values)
+        {
+            GameMatch? match = null;
+
+            string leagueName = values[0].ToLower();
+            string homeTeam = values[1];
+            string awayTeam = values[2];
+            int homeGoals;
+            int awayGoals;
+            bool homeGoalsIsValid = int.TryParse(values[3], out homeGoals);
+            bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
+            if (homeGoalsIsValid && awayGoalsIsValid && homeTeam != awayTeam)
+            {
+                match = new GameMatch(leagueName, homeTeam, awayTeam, homeGoals, awayGoals);
+                Console.WriteLine(string.Join(' ', values));
+                
+            }
+            return match;
+            
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using FootBall.File;
-using Football_tables.models;
-using System;
-using System.Text;
 using Football_tables.enums;
+using Football_tables.models;
 
 namespace Football_tables
 {
-	internal class Service
+    internal class Service
 	{
 		private FileHandler fileHandler;
 		public Service()
@@ -30,7 +28,7 @@ namespace Football_tables
                     if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round)) {
                        if (round.Number < 23)
                         {
-                            processMatch(match, homeTeam.Result, awayTeam.Result);
+                            ProcessMatch(match, homeTeam.Result, awayTeam.Result);
 
                         }
                         else
@@ -38,11 +36,16 @@ namespace Football_tables
                            
                         }
                     }
-                }       
-        }           
+                }
+                foreach (var key in leagues.Keys)
+                {
+                    View.PrintCurrentStanding(leagues[key].Teams);
+                }
+        }
+            
         }
 
-        private void processMatch(Match match, Result homeTeamResult, Result awayTeamResult)
+        private void ProcessMatch(GameMatch match, Result homeTeamResult, Result awayTeamResult)
         {
             
 
@@ -80,7 +83,7 @@ namespace Football_tables
 
         }
 
-        private bool HasAlreadyPlayed(Match match, Team? homeTeam, Team? awayTeam, Round round)
+        private bool HasAlreadyPlayed(GameMatch match, Team? homeTeam, Team? awayTeam, Round round)
         {
 
             foreach (string homeMatchAgainst in homeTeam.HomeMatchesAgainst)
@@ -95,7 +98,7 @@ namespace Football_tables
             return false;
         }
 
-        private (Team?,Team?) findTeams(Match match, League league)
+        private (Team?,Team?) findTeams(GameMatch match, League league)
         {
             Team? homeTeam = null;
             Team? awayTeam = null;
@@ -116,7 +119,7 @@ namespace Football_tables
             return (homeTeam, awayTeam);
         }
 
-        private bool IsRelevantMatch(League league, Match match)
+        private bool IsRelevantMatch(League league, GameMatch match)
         {
                 if (league.LeagueInfo.Name == match.League)
                 {

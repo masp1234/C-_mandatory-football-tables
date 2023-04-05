@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Football_tables.models
+﻿namespace Football_tables.models
 {
-    internal class Match
+    internal class GameMatch
     {
         public String League { get; set; }
         public String Home { get; set; }
@@ -14,7 +8,7 @@ namespace Football_tables.models
         public int HomeGoals { get; set; }
         public int AwayGoals { get; set; }
 
-        public Match(string league, string home, string away, int homeGoals, int awayGoals)
+        public GameMatch(string league, string home, string away, int homeGoals, int awayGoals)
         {
             this.League = league;
             this.Home = home;

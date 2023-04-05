@@ -1,7 +1,6 @@
-﻿using System;
-namespace Football_tables
+﻿namespace Football_tables
 {
-	public class Controller
+    public class Controller
 	{
 		public Controller()
 		{

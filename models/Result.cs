@@ -1,5 +1,4 @@
-﻿using System;
-using Football_tables.enums;
+﻿using Football_tables.enums;
 namespace Football_tables.models
 {
     internal class Result

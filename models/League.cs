@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Football_tables.models
+﻿namespace Football_tables.models
 {
     internal class League
     {
@@ -27,7 +21,7 @@ namespace Football_tables.models
         {
             return $"League info: {this.LeagueInfo}";
         }
-        public static List<Team> sortList(List<Team> teams)
+        public static List<Team> SortList(List<Team> teams)
         {
             return teams.OrderByDescending(team => team.Result.Points)
                 .ThenByDescending(team => team.Result.GoalDifference)
