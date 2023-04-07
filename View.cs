@@ -5,7 +5,11 @@ namespace Football_tables
 	{
         public static void PrintCurrentStanding(List<Team> teams)
         {
-            Console.WriteLine(League.SortList(teams));
+            var currentStanding = League.SortList(teams);
+            foreach (var team in currentStanding)
+            {
+                Console.WriteLine(team);
+            }
         }
     }
 }

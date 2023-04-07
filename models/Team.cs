@@ -11,7 +11,6 @@
             Result = new();
             HomeMatchesAgainst = new();
         }
-
         public string Abbreviation { get; set; }
         public string FullName { get; set; }
         
@@ -30,6 +29,10 @@
         public void AddHomeMatchesAgainst(string homeMatch)
         {
             HomeMatchesAgainst.Add(homeMatch);
+        }
+        public override string ToString()
+        {
+            return $"{this.Abbreviation}, {this.LeagueName}, {this.Result}";
         }
     }
 }

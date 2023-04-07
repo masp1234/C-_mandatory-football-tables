@@ -7,7 +7,6 @@ namespace FootBall.File
 
     internal class FileHandler
     {
-
         public List<Team> ReadTeams()
         {
             List<Team> teams = new();
@@ -18,10 +17,8 @@ namespace FootBall.File
                 var line = reader.ReadLine();
                 var values = line.Split(';');
                 Team team = new Team(values[0], values[1], values[2], values[3]);
-                Console.WriteLine(string.Join(' ', values));
                 teams.Add(team);
             }
-            Console.WriteLine(teams.Count);
 
             return teams;
         }
@@ -82,7 +79,6 @@ namespace FootBall.File
                     leagues.Add(league);
                 }
             }
-            Console.WriteLine(string.Join(' ', leagues));
             return leagues;
         }
 
@@ -124,8 +120,6 @@ namespace FootBall.File
                 }
                 rounds.Add(round);
             }
-            Console.WriteLine(string.Join(' ', files));
-
             return rounds;
 
 
@@ -144,7 +138,7 @@ namespace FootBall.File
             if (homeGoalsIsValid && awayGoalsIsValid && homeTeam != awayTeam)
             {
                 match = new GameMatch(leagueName, homeTeam, awayTeam, homeGoals, awayGoals);
-                Console.WriteLine(string.Join(' ', values));
+                
                 
             }
             return match;

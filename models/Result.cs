@@ -22,8 +22,10 @@ namespace Football_tables.models
             MatchResults.Add(matchResult);
         }
 
-
-        //Lav en comparator der skal sorteres efter de 5 ting som opgaven nævner
+        public override string ToString()
+        {
+            return $"{GamesPlayed}";
+        }
 	}
 }
 
