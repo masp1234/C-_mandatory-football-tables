@@ -1,6 +1,7 @@
 ﻿using FootBall.File;
 using Football_tables.enums;
 using Football_tables.models;
+using System.Text.RegularExpressions;
 
 namespace Football_tables
 {
@@ -31,7 +32,7 @@ namespace Football_tables
                     if (round.Number < 23)
                     {
                         
-                        (Team? homeTeam, Team? awayTeam) = findTeams(match, league.Teams);
+                        (Team? homeTeam, Team? awayTeam) = FindTeams(match, league.Teams);
                         if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round))
                         {
 
@@ -40,7 +41,7 @@ namespace Football_tables
                     }
                     else
                     {
-
+                        
                     }        
                 }
                 foreach (var key in leagues.Keys)
@@ -120,25 +121,40 @@ namespace Football_tables
             return false;
         }
 
-        private (Team?,Team?) findTeams(GameMatch match, List<Team> teams)
+        private (Team?,Team?) FindTeams(GameMatch match, List<Team> teams, List<Team>? lowerFraction = null)
         {
             Team? homeTeam = null;
             Team? awayTeam = null;
 
-            foreach(Team team in teams)
+            SetTeams(teams, match, homeTeam, awayTeam);
+
+            if (lowerFraction is not null && homeTeam is not null && awayTeam is not null)
             {
-                if(homeTeam != null && awayTeam != null)
+                SetTeams(lowerFraction, match, homeTeam, awayTeam);
+            }
+
+            return (homeTeam, awayTeam);
+        }
+        private void SetTeams(List<Team> teams, GameMatch match, Team homeTeam, Team awayTeam)
+        {
+            
+            foreach (Team team in teams)
+            {
+                if (homeTeam is not null && awayTeam is not null)
                 {
-                    break;
-                }else if(match.Home == team.Abbreviation)
+                    return;
+                }
+                else if (match.Home == team.Abbreviation)
                 {
                     homeTeam = team;
-                }else if(match.Away == team.Abbreviation)
+                    
+                }
+                else if (match.Away == team.Abbreviation)
                 {
                     awayTeam = team;
                 }
+
             }
-            return (homeTeam, awayTeam);
         }
 
         private bool IsRelevantMatch(League league, GameMatch match)

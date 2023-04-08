@@ -137,9 +137,7 @@ namespace FootBall.File
             bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
             if (homeGoalsIsValid && awayGoalsIsValid && homeTeam != awayTeam)
             {
-                match = new GameMatch(leagueName, homeTeam, awayTeam, homeGoals, awayGoals);
-                
-                
+                match = new GameMatch(leagueName, homeTeam, awayTeam, homeGoals, awayGoals);    
             }
             return match;
             
