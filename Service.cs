@@ -16,6 +16,7 @@ namespace Football_tables
 		{
             
             var leagues = GetLeagues();
+            /*
             var rounds = fileHandler.ReadRounds();
             leagues = DivideIntoFractions(leagues);
             foreach (var round in rounds)
@@ -48,8 +49,9 @@ namespace Football_tables
                     View.PrintCurrentStanding(leagues[key].Teams);
                     Console.WriteLine();
                 }
-        }
             
+        }
+         */   
         }
 
         private Dictionary<string, League> DivideIntoFractions(Dictionary<string, League> leagues)
