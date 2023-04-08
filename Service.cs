@@ -15,41 +15,61 @@ namespace Football_tables
 
 		public void Run()
 		{
-            
+            int splitIntoFractionsRound = 15;
             var leagues = GetLeagues();
             var rounds = fileHandler.ReadRounds();
-            leagues = DivideIntoFractions(leagues);
+
             foreach (var round in rounds)
             {
-                if (round.Number == 23)
+                if (round.Number == splitIntoFractionsRound)
                 {
                     leagues = DivideIntoFractions(leagues);
                 }
                 foreach (var match in round.Matches)   
-                {
-                    
+                {    
                     League league = leagues[match.League];
-                    if (round.Number < 23)
-                    {
-                        
+                    if (round.Number < splitIntoFractionsRound)
+                    {    
                         (Team? homeTeam, Team? awayTeam) = FindTeams(match, league.Teams);
-                        if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round))
-                        {
 
-                            ProcessMatch(match, homeTeam.Result, awayTeam.Result);
-                        }
+                        if (homeTeam is not null && awayTeam is not null)
+                        {
+                            if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round))
+                            {
+
+                                ProcessMatch(match, homeTeam.Result, awayTeam.Result);
+                            }
+                        }       
                     }
                     else
                     {
-                        
+                        (Team? homeTeam, Team? awayTeam) = FindTeams(match, league.UpperFraction.ToList(), league.LowerFraction.ToList());
+
+                        if (homeTeam is not null && awayTeam is not null)
+                        {
+                            if (IsRelevantMatch(league, match) && !HasAlreadyPlayed(match, homeTeam, awayTeam, round))
+                            {
+                                ProcessMatch(match, homeTeam.Result, awayTeam.Result);
+                            }
+                        }
                     }        
                 }
-                foreach (var key in leagues.Keys)
+                if (round.Number < splitIntoFractionsRound)
+                foreach (League league in leagues.Values)
                 {
-                    View.PrintCurrentStanding(leagues[key].Teams);
+                    View.PrintCurrentStanding(league.Teams);
                     Console.WriteLine();
                 }
-        }
+                if (round.Number >= splitIntoFractionsRound)
+                    foreach (League league in leagues.Values)
+                    {
+                        View.PrintCurrentStanding(league.UpperFraction.ToList());
+                        Console.WriteLine();
+                        View.PrintCurrentStanding(league.LowerFraction.ToList());
+                        Console.WriteLine();
+                    }
+
+            }
             
         }
 
@@ -58,8 +78,9 @@ namespace Football_tables
             foreach (var league in leagues.Values)
             {   // skal måske lige ændres - kommer an på om range er inklusiv eller eklusiv.
                 ClearMatchHistory(league.Teams);
-                league.UpperFraction = league.Teams.ToArray()[..(league.Teams.Count / 2)];
-                league.LowerFraction = league.Teams.ToArray()[(league.Teams.Count / 2)..];
+                List<Team> teams = League.SortList(league.Teams);
+                league.UpperFraction = teams.ToArray()[..(teams.Count / 2)];
+                league.LowerFraction = teams.ToArray()[(teams.Count / 2)..];
             }
             return leagues;
         }
@@ -113,7 +134,7 @@ namespace Football_tables
             {
                 if (homeMatchAgainst == awayTeam.Abbreviation)
                 {
-                    throw new InvalidDataException($"{match.Home} has already played against {match.Away}. " +
+                    Console.WriteLine($"{match.Home} as home team has already played against {match.Away} as away team. " +
                                                     $"The error is in round: {round.Number}");
                 }
             }
@@ -126,16 +147,16 @@ namespace Football_tables
             Team? homeTeam = null;
             Team? awayTeam = null;
 
-            SetTeams(teams, match, homeTeam, awayTeam);
+            SetTeams(teams, match, ref homeTeam, ref awayTeam);
 
             if (lowerFraction is not null && homeTeam is not null && awayTeam is not null)
             {
-                SetTeams(lowerFraction, match, homeTeam, awayTeam);
+                SetTeams(lowerFraction, match, ref homeTeam, ref awayTeam);
             }
 
             return (homeTeam, awayTeam);
         }
-        private void SetTeams(List<Team> teams, GameMatch match, Team homeTeam, Team awayTeam)
+        private void SetTeams(List<Team> teams, GameMatch match, ref Team homeTeam, ref Team awayTeam)
         {
             
             foreach (Team team in teams)
@@ -175,14 +196,23 @@ namespace Football_tables
             {
                 for (int i = 0; i < teams.Count; i++)
                 {
+                    string teamName = teams[i].LeagueName;
+                    Console.WriteLine(teamName);
+                    string leagueName = league.LeagueInfo.Name;
+                    Console.WriteLine(leagueName);
                     if (league.LeagueInfo.Name == teams[i].LeagueName)
                     {
+                        Console.WriteLine(teams[i]);
                         league.Add(teams[i]);
                         teams.RemoveAt(i);
                         i--;
                     }
                 }
                 leagueDictionary.Add(league.LeagueInfo.Name, league);
+            }
+            foreach (League league in leagueDictionary.Values)
+            {
+                Console.WriteLine(league.Teams.Count);
             }
             return leagueDictionary;
         }

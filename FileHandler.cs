@@ -16,10 +16,10 @@ namespace FootBall.File
             {
                 var line = reader.ReadLine();
                 var values = line.Split(';');
-                Team team = new Team(values[0], values[1], values[2], values[3]);
+                Team team = new Team(values[0], values[1], values[2], values[3].ToLower());
                 teams.Add(team);
             }
-
+            Console.WriteLine(teams.Count);
             return teams;
         }
 
