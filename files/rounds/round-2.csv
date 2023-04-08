@@ -1,4 +1,13 @@
-league;home; away; homegoals; awayGoals;
-Superligaen;OB;BIF;0;0;
-Nordicbetligaen;AGF;FCK;2;1;
-Nordicbetligaen;AAB;SIF;4;2;
+league;home;away;homegoals;awayGoals
+Superligaen;VFF;RFC;1;2;
+Superligaen;BIF;FCK;1;1;
+Superligaen;OB;FCN;0;0;
+Superligaen;ACH;SIF;1;2;
+Superligaen;LBK;FCM;2;3;
+Superligaen;AGF;AAB;1;0;
+Nordicbet;HIK;HBK;0;0;
+Nordicbet;HIF;FCH;1;0;
+Nordicbet;VFF;FA;2;1;
+Nordicbet;SØJ;NBK;2;1;
+Nordicbet;NFC;VB;1;1;
+Nordicbet;HF;AAB;0;2;

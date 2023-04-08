@@ -10,5 +10,9 @@
 
   <ItemGroup>
     <None Remove="models\" />
+    <None Remove="files\rounds\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="files\rounds\" />
   </ItemGroup>
 </Project>
