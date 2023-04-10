@@ -40,9 +40,10 @@ Nordicbet;NFC;HIK;6;0;
 Runde filen bruges til at opdatere holdenes point
 
 
+## Errors
+
 Vi har lavet en testmappe, som kan producere de fejlbeskeder der er i vores program
 
-## Errors
 
 ```
 The match in file: round-003 has invalid data on line: 2
