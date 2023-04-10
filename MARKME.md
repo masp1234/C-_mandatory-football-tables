@@ -67,12 +67,16 @@ throw new InvalidDataException($"The match in file: {fileName} has invalid data 
 ```
 Filehandler class, line: 119
 
-## Out
+## Out / ref
 
 ```
 bool homeGoalsIsValid = int.TryParse(values[3], out int homeGoals);
 ```
 Filehandler class, line: 141
+```
+private void SetTeams(List<Team> teams, GameMatch match, ref Team homeTeam, ref Team awayTeam)
+```
+Service class, line: 156
 
 ## Arrays / Collections
 
