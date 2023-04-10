@@ -78,6 +78,10 @@ namespace Football_tables
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
+                else
+                {
+                    Console.ResetColor();
+                }
             }
             else if (fraction.ToLower() == "upper fraction" &&
                     leagueInfo.PositionsPromotedToChampionsLeague +
