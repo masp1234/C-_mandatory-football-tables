@@ -94,10 +94,10 @@ namespace FootBall.File
                 string fileName = regexMatch.Value[1..];
                 string[] strings = fileName.Split("-");
                 int roundNumber = int.Parse(strings[1]);
-                
+
                 Round round = new Round(roundNumber);
                 StreamReader reader = new StreamReader(System.IO.File.OpenRead(file));
-                
+
                 reader.ReadLine();
 
                 int lineNumber = 2;
@@ -106,6 +106,12 @@ namespace FootBall.File
                 {
                     var line = reader.ReadLine();
                     var values = line.Split(';');
+
+                    if (IsTeamPlayingAgainstItself(values))
+                    {
+                        throw new InvalidDataException($"{values[1]} is playing against {values[2]}." +
+                            $" A team playing against itself is not allowed. The error is happening in file: {fileName} on line: {lineNumber}");
+                    }
 
                     GameMatch? match = CreateGameMatch(values);
                     if (match == null)
@@ -121,6 +127,10 @@ namespace FootBall.File
 
 
         }
+        private bool IsTeamPlayingAgainstItself(string[] values)
+        {
+            return values[1] == values[2];
+        } 
         private GameMatch? CreateGameMatch(string[] values)
         {
             GameMatch? match = null;
@@ -128,11 +138,9 @@ namespace FootBall.File
             string leagueName = values[0].ToLower();
             string homeTeam = values[1];
             string awayTeam = values[2];
-            int homeGoals;
-            int awayGoals;
-            bool homeGoalsIsValid = int.TryParse(values[3], out homeGoals);
-            bool awayGoalsIsValid = int.TryParse(values[4], out awayGoals);
-            if (homeGoalsIsValid && awayGoalsIsValid && homeTeam != awayTeam)
+            bool homeGoalsIsValid = int.TryParse(values[3], out int homeGoals);
+            bool awayGoalsIsValid = int.TryParse(values[4], out int awayGoals);
+            if (homeGoalsIsValid && awayGoalsIsValid)
             {
                 match = new GameMatch(leagueName, homeTeam, awayTeam, homeGoals, awayGoals);    
             }
