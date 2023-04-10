@@ -57,16 +57,15 @@ namespace Football_tables
                 if (round.Number < splitIntoFractionsRound)
                 foreach (League league in leagues.Values)
                 {
-                    View.PrintCurrentStanding(league.Teams);
-                    Console.WriteLine();
+                    View.PrintCurrentStanding(league.Teams, league.LeagueInfo);
+               
                 }
                 if (round.Number >= splitIntoFractionsRound)
                     foreach (League league in leagues.Values)
                     {
-                        View.PrintCurrentStanding(league.UpperFraction.ToList());
-                        Console.WriteLine();
-                        View.PrintCurrentStanding(league.LowerFraction.ToList());
-                        Console.WriteLine();
+                        View.PrintCurrentStanding(league.UpperFraction.ToList(), league.LeagueInfo, "Upper Fraction");
+                        
+                        View.PrintCurrentStanding(league.LowerFraction.ToList(), league.LeagueInfo, "Lower Fraction");
                     }
 
             }
@@ -76,7 +75,7 @@ namespace Football_tables
         private Dictionary<string, League> DivideIntoFractions(Dictionary<string, League> leagues)
         {
             foreach (var league in leagues.Values)
-            {   // skal måske lige ændres - kommer an på om range er inklusiv eller eklusiv.
+            {
                 ClearMatchHistory(league.Teams);
                 List<Team> teams = League.SortList(league.Teams);
                 league.UpperFraction = teams.ToArray()[..(teams.Count / 2)];
@@ -91,8 +90,6 @@ namespace Football_tables
 
         private void ProcessMatch(GameMatch match, Result homeTeamResult, Result awayTeamResult)
         {
-            
-
             homeTeamResult.GoalsAgainst += match.AwayGoals;
             awayTeamResult.GoalsAgainst += match.HomeGoals;
 
@@ -197,12 +194,10 @@ namespace Football_tables
                 for (int i = 0; i < teams.Count; i++)
                 {
                     string teamName = teams[i].LeagueName;
-                    Console.WriteLine(teamName);
                     string leagueName = league.LeagueInfo.Name;
-                    Console.WriteLine(leagueName);
+                   
                     if (league.LeagueInfo.Name == teams[i].LeagueName)
                     {
-                        Console.WriteLine(teams[i]);
                         league.Add(teams[i]);
                         teams.RemoveAt(i);
                         i--;
@@ -210,10 +205,7 @@ namespace Football_tables
                 }
                 leagueDictionary.Add(league.LeagueInfo.Name, league);
             }
-            foreach (League league in leagueDictionary.Values)
-            {
-                Console.WriteLine(league.Teams.Count);
-            }
+            
             return leagueDictionary;
         }
 	}
