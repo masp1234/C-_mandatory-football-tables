@@ -1,1 +1,131 @@
-﻿
+﻿Our prompt
+
+hello, i need you to make 22 csv files that depict rounds in a soccer tournament from a list of teams:
+
+Abbreviation;Full name;status;league;
+FCF;FC Fredericia;P;Nordicbet;
+FCN;FC Nordsjælland;P;Superligaen;
+FCK;FC København;W;Superligaen;
+VFF;Viborg FF;P;Superligaen;
+AGF;Aarhus Gymnasticforening;C;Superligaen
+FA;Fremad Amager;;Nordicbet:
+FCH;FC Helsingør;P;Nordicbet;
+HIK;Hobro IK;;Nordicbet;
+RFC;Randers FC;R;Superligaen;
+BIF;Brøndby IF;;Superligaen;
+HBK;HB Køge;;Nordicbet;
+HF;Hillerød Fodbold;R;Nordicbet;
+SIF;Silkeborg IF;C;Superligaen;
+FCM;FC Midtjylland;;Superligaen;
+HIF;Hvidovre IF;R;Nordicbet;
+OB;Odense Boldklub;;Superligaen;
+ACH;AC Horsens;;Superligaen;
+VFF;Vendsyssel FF;Nordicbet;
+NBK;Næstved BK;;Nordicbet;
+LBK;Lyngby Boldklub;;Superligaen;
+VB;Vejle Boldklub;C;Nordicbet;
+SØJ;Sønderjyske;R;Nordicbet;
+NFC;Nykøbing FC;W;Nordicbet;
+AAB;Aarlborg Boldspilklub;;Superligaen;
+
+ a round looks like this:
+ league;home; away; homegoals; awayGoals; 
+
+The rules are like this
+-    Each round consists of 6 matches per league
+-    A team can only play against another team twice: one homematch and one awaymatch
+-    A team can’t play against itself
+-    The delimiter used is a semicolon
+-    The awayGoals and homeGoals is a number less then 7 and greater or equal to 0
+-    In the round files the abbreviation should be used for home and away
+-    Each round file should contain the matches from both leagues
+
+Can you make a python script that can generate these files from a input that contains the above?
+
+
+
+
+
+
+
+
+
+
+
+ChatGPT answer
+
+Sure! Here's a Python script that can generate the 22 CSV files for the soccer tournament rounds based on the input teams data you provided:
+
+
+
+
+
+import random
+
+teams_data = [
+    ["FCF", "FC Fredericia", "P", "Nordicbet"],
+    ["FCN", "FC Nordsjælland", "P", "Superligaen"],
+    ["FCK", "FC København", "W", "Superligaen"],
+    ["VFF", "Viborg FF", "P", "Superligaen"],
+    ["AGF", "Aarhus Gymnasticforening", "C", "Superligaen"],
+    ["FA", "Fremad Amager", "", "Nordicbet"],
+    ["FCH", "FC Helsingør", "P", "Nordicbet"],
+    ["HIK", "Hobro IK", "", "Nordicbet"],
+    ["RFC", "Randers FC", "R", "Superligaen"],
+    ["BIF", "Brøndby IF", "", "Superligaen"],
+    ["HBK", "HB Køge", "", "Nordicbet"],
+    ["HF", "Hillerød Fodbold", "R", "Nordicbet"],
+    ["SIF", "Silkeborg IF", "C", "Superligaen"],
+    ["FCM", "FC Midtjylland", "", "Superligaen"],
+    ["HIF", "Hvidovre IF", "R", "Nordicbet"],
+    ["OB", "Odense Boldklub", "", "Superligaen"],
+    ["ACH", "AC Horsens", "", "Superligaen"],
+    ["VFF", "Vendsyssel FF", "", "Nordicbet"],
+    ["NBK", "Næstved BK", "", "Nordicbet"],
+    ["LBK", "Lyngby Boldklub", "", "Superligaen"],
+    ["VB", "Vejle Boldklub", "C", "Nordicbet"],
+    ["SØJ", "Sønderjyske", "R", "Nordicbet"],
+    ["NFC", "Nykøbing FC", "W", "Nordicbet"],
+    ["AAB", "Aarlborg Boldspilklub", "", "Superligaen"]
+]
+
+def generate_rounds(teams_data):
+    leagues = {}
+    for team in teams_data:
+        league = team[3]
+        if league not in leagues:
+            leagues[league] = []
+        leagues[league].append(team)
+
+    rounds = []
+    for i in range(len(leagues)):
+        league = list(leagues.keys())[i]
+        teams = leagues[league]
+        round_teams = teams[:]
+        random.shuffle(round_teams)
+
+        while len(round_teams) > 1:
+            home = round_teams.pop(0)
+            for away in round_teams:
+                if home[0] != away[0]:
+                    match = [league, home[0], away[0], str(random.randint(0, 6)), str(random.randint(0, 6))]
+                    rounds.append(match)
+                    round_teams.remove(away)
+                    break
+
+    return rounds
+
+for i in range(1, 23):
+    rounds = generate_rounds(teams_data)
+    filename = f"round{i}.csv"
+    with open(filename, "w") as f:
+        f.write("league;home;away;homegoals;awaygoals\n")
+        for match in rounds:
+            f.write(";".join(match) + "\n")
+
+
+
+
+Vi fik dette svar men vi blev nødt til at ændre lidt i python scriptet.
+De rundefiler vi fik overholdte ikke de regler vi havde givet chatGPT
+men i det mindste fik vi noget data der kunne bruges. 
